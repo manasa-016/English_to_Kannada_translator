@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multilingual Translator</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Kannada&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <h1><i class="fas fa-globe"></i> Multilingual Translator</h1>
+                <p>Voice, Text, and Speech Translation in Multiple Languages</p>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Mode Selection -->
+            <div class="mode-selector">
+                <button class="mode-btn active" data-mode="text-to-text">
+                    <i class="fas fa-keyboard"></i> Text to Text
+                </button>
+                <button class="mode-btn" data-mode="text-to-voice">
+                    <i class="fas fa-microphone"></i> Text to Voice
+                </button>
+                <button class="mode-btn" data-mode="voice-to-text">
+                    <i class="fas fa-volume-up"></i> Voice to Text
+                </button>
+                <button class="mode-btn" data-mode="voice-to-voice">
+                    <i class="fas fa-exchange-alt"></i> Voice to Voice
+                </button>
+            </div>
+
+            <!-- Translator Container -->
+            <div class="translator-container">
+                <!-- Left Panel - Source -->
+                <div class="panel source-panel">
+                    <div class="panel-header">
+                        <h2>Source</h2>
+                        <select id="sourceLang" class="language-select">
+                            <option value="English">English</option>
+                            <option value="Kannada">Kannada</option>
+                            <option value="Hindi">Hindi</option>
+                            <option value="Tamil">Tamil</option>
+                            <option value="Telugu">Telugu</option>
+                            <option value="Spanish">Spanish</option>
+                            <option value="French">French</option>
+                            <option value="German">German</option>
+                            <option value="Chinese">Chinese</option>
+                            <option value="Japanese">Japanese</option>
+                            <option value="Arabic">Arabic</option>
+                            <option value="Portuguese">Portuguese</option>
+                            <option value="Russian">Russian</option>
+                            <option value="Italian">Italian</option>
+                            <option value="Malayalam">Malayalam</option>
+                        </select>
+                    </div>
+
+                    <!-- Text Input -->
+                    <div id="text-to-text-input" class="input-section active">
+                        <textarea id="sourceText" class="text-input" placeholder="Enter text to translate..."></textarea>
+                        <button id="clearSourceText" class="btn-secondary">
+                            <i class="fas fa-trash"></i> Clear
+                        </button>
+                    </div>
+
+                    <!-- Voice Input -->
+                    <div id="voice-input-section" class="input-section">
+                        <div class="voice-input-area">
+                            <button id="recordBtn" class="btn-voice">
+                                <i class="fas fa-microphone"></i> Start Recording
+                            </button>
+                            <div id="recordingStatus" class="recording-status" style="display: none;">
+                                <div class="recording-indicator">
+                                    <span class="pulse"></span>
+                                    Recording...
+                                </div>
+                                <p id="recordingTime">00:00</p>
+                            </div>
+                            <div id="audioPlayback" class="audio-playback" style="display: none;">
+                                <audio controls id="sourceAudio"></audio>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Center - Translate Button -->
+                <div class="center-panel">
+                    <button id="translateBtn" class="btn-translate">
+                        <i class="fas fa-arrow-right"></i>
+                        <span>Translate</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </button>
+                    <button id="swapBtn" class="btn-swap" title="Swap languages">
+                        <i class="fas fa-exchange-alt"></i>
+                    </button>
+                </div>
+
+                <!-- Right Panel - Target -->
+                <div class="panel target-panel">
+                    <div class="panel-header">
+                        <h2>Target</h2>
+                        <select id="targetLang" class="language-select">
+                            <option value="Kannada">Kannada</option>
+                            <option value="English">English</option>
+                            <option value="Hindi">Hindi</option>
+                            <option value="Tamil">Tamil</option>
+                            <option value="Telugu">Telugu</option>
+                            <option value="Spanish">Spanish</option>
+                            <option value="French">French</option>
+                            <option value="German">German</option>
+                            <option value="Chinese">Chinese</option>
+                            <option value="Japanese">Japanese</option>
+                            <option value="Arabic">Arabic</option>
+                            <option value="Portuguese">Portuguese</option>
+                            <option value="Russian">Russian</option>
+                            <option value="Italian">Italian</option>
+                        </select>
+                    </div>
+
+                    <!-- Text Output -->
+                    <div id="text-output-section" class="output-section active">
+                        <div id="targetText" class="text-output">
+                            <p class="placeholder">Translation will appear here...</p>
+                        </div>
+                        <div class="output-buttons">
+                            <button id="copyTargetText" class="btn-secondary" title="Copy text">
+                                <i class="fas fa-copy"></i> Copy
+                            </button>
+                            <button id="speakTargetText" class="btn-secondary" title="Listen to translation">
+                                <i class="fas fa-volume-up"></i> Listen
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Voice Output -->
+                    <div id="voice-output-section" class="output-section">
+                        <div class="voice-output-area">
+                            <div id="targetAudioPlayback" class="audio-playback">
+                                <audio controls id="targetAudio"></audio>
+                            </div>
+                            <button id="downloadAudio" class="btn-secondary" style="display: none;">
+                                <i class="fas fa-download"></i> Download Audio
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- History Section -->
+            <div class="history-section">
+                <h3><i class="fas fa-history"></i> Recent Translations</h3>
+                <div id="historyContainer" class="history-container">
+                    <p class="empty-message">No translations yet</p>
+                </div>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>&copy; 2026 Multilingual Translator. All languages supported. Built with Flask & Web APIs.</p>
+        </footer>
+    </div>
+
+    <!-- Loading Indicator -->
+    <div id="loadingIndicator" class="loading-indicator">
+        <div class="spinner"></div>
+        <p>Processing...</p>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast"></div>
+
+    <!-- Scripts -->
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>
